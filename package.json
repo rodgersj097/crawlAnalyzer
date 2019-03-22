@@ -1,0 +1,27 @@
+{
+  "name": "crawlanalyzer",
+  "version": "1.0.0",
+  "description": "This app wil deliver up to date details on broken links and redirection issues",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodgersj097/crawlAnalyzer.git"
+  },
+  "author": "Jacob Rodgers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rodgersj097/crawlAnalyzer/issues"
+  },
+  "homepage": "https://github.com/rodgersj097/crawlAnalyzer#readme",
+  "dependencies": {
+    "bookshelf": "^0.14.2",
+    "csv": "^5.1.1",
+    "csv-parser": "^2.2.0",
+    "express": "^4.16.4",
+    "knex": "^0.16.3"
+  }
+}
