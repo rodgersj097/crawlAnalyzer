@@ -1,0 +1,27 @@
+
+
+ <section id="gigs" class="container">
+    <h1>All Links</h1>
+
+    {{#each links }}
+    <div class="gig">
+      <ul>
+        <li>{{type}}</li>
+        <li>{{source}}</li>
+        <li>{{destination}}</li>
+        <li>{{size}}</li>
+        <li>{{altText}}</li>
+        <li>{{anchor}}</li>
+        <li>{{statusCode}}</li>
+        <li>{{status}}</li>
+        <li>{{follow}} </li>
+      </ul>
+    </div>
+    {{else}}
+        <p>NO links availabe</p>
+
+    {{/each}}
+    
+
+    
+  </section>
