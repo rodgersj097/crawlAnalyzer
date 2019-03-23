@@ -1,17 +1,20 @@
 const express = require('express')
-const app = express() 
-const csv = require('csv-parse')
+const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
+const path = require('path')
+const db = require('./config/DBConnect')
 const fs = require('fs')
-const csvParser = require('./csvParser')
+const app = express() 
+//test DB 
+db.authenticate()
+    .then(() => console.log('Database connected .. '))
+    .catch(err => console.log('Error' + err))
 
+const PORT = process.env.PORT || 8090; 
 
+app.get('/', (req,res)  => res.send('INDEX'))
 
-app.get('/', function(req,res) {
-    res.sendFile(__dirname+"/index.html")
-})
+//Link Routes
+app.use('/links', require('./routes/links'))
 
-
-
-app.listen(8090, function() { 
-    console.log("server started on port 8090");
-})
+app.listen(PORT, console.log(`Server started on port ${PORT}`))
