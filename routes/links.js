@@ -55,7 +55,39 @@ router.get('/search', (req,res) => {
     //make lowercase 
     term = term.toLowerCase(); 
 
-    Link.findAll({ where: {statusCode : {[Op.like] : '%' + term + '%' } } }  )
+    Link.findAll({ 
+        where: {
+            [Op.or]: [
+                {
+                    type : {[Op.like] : '%' + term + '%' }
+                 },
+                 {
+                    source : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    destination : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    size : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    altText : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    anchor : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    statusCode : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    status : {[Op.like] : '%' + term + '%' }   
+                 },
+                 {
+                    follow : {[Op.like] : '%' + term + '%' }   
+                 }
+                ]
+        
+                } } )  
     .then(links => res.render('links', {links}))
     .catch(err => console.log(err))
 
