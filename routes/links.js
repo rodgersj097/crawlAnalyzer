@@ -29,7 +29,7 @@ router.post('/add', (req, res) =>{
         follow: "true"
     }
 
-    let{type, source,destination,size,altText,anchor,statusCode,status,folow} = data
+    let{type,source,destination,size,altText,anchor,statusCode,status,follow} = data
 
     //Ibsert into tble=[]
     Link.create({ 
@@ -40,9 +40,10 @@ router.post('/add', (req, res) =>{
         altText,
         anchor, 
         statusCode,
-        status
+        status,
+        follow
       
-       
+
     })
     .then(link => res.redirect('/links'))
     .catch(err => console.log(err))
@@ -54,7 +55,6 @@ router.get('/search', (req,res) => {
     let {term} = req.query; 
     //make lowercase 
     term = term.toLowerCase(); 
-
     Link.findAll({ 
         where: {
             [Op.or]: [

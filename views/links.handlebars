@@ -1,5 +1,4 @@
-
-
+<!--this is the view for the body--> 
  <section id="gigs" class="container">
     <h1>All Links</h1>
 
@@ -7,8 +6,8 @@
     <div class="gig">
       <ul>
         <li>{{type}}</li>
-        <li>{{source}}</li>
-        <li>{{destination}}</li>
+        <li><a href="{{source}}">{{source}}</a></li>
+        <li><a href="{{destination}}">{{destination}}</a></li>
         <li>{{size}}</li>
         <li>{{altText}}</li>
         <li>{{anchor}}</li>
@@ -18,10 +17,7 @@
       </ul>
     </div>
     {{else}}
-        <p>NO links availabe</p>
+        <p>No links availabe</p>
 
     {{/each}}
-    
-
-    
   </section>
