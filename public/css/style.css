@@ -33,7 +33,7 @@ a:hover {
 }
 
 .container {
-  max-width: 70%;
+  max-width: 70vm;
   padding: 1rem 4rem;
   margin: auto;
   overflow: hidden;

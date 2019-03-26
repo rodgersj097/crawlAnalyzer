@@ -6,8 +6,8 @@
     <div class="gig">
       <ul>
         <li>{{type}}</li>
-        <li><a href="{{source}}">{{source}}</a></li>
-        <li><a href="{{destination}}">{{destination}}</a></li>
+        <li><a href="{{source}}" target="_blank">{{source}}</a></li>
+        <li><a href="{{destination}}" target="_blank">{{destination}}</a></li>
         <li>{{size}}</li>
         <li>{{altText}}</li>
         <li>{{anchor}}</li>
@@ -15,9 +15,9 @@
         <li>{{status}}</li>
         <li>{{follow}} </li>
       </ul>
+      <button class="btn">Check</button>
     </div>
     {{else}}
         <p>No links availabe</p>
-
     {{/each}}
   </section>

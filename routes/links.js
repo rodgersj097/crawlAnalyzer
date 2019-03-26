@@ -4,6 +4,7 @@ const db = require('../config/DBConnect')
 const Link = require('../model/link')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op; 
+const {spawn} = require('child_process')
 //Get link list
 router.get('/', (req,res) =>
  Link.findAll()
@@ -14,42 +15,23 @@ router.get('/', (req,res) =>
     .catch(err => console.log(err))
  )
 
+router.post('/links/check', (req,res) => {
+   let {destination} = req.query 
+   var bat = require.resolve('../results/link-crawl.bat')
+   var config = 'C:\Users\rodgersja\Documents\SEO Spider Config.seospiderconfig'
+   var ls = spawn(bat, ['--config', config], ['--crawl', destination] )
 
-//Add a link 
-router.post('/add', (req, res) =>{
-    const data = { 
-        type: 'HREF',
-        source: "https://stg-www.worldvision.ca/privacy-and-security",
-        destination: "https://my.worldvision.ca/home/index",
-        size: "0",
-        altText:"",
-        anchor: "My World Vision",
-        statusCode:"404",
-        status:"Not Found",
-        follow: "true"
-    }
-
-    let{type,source,destination,size,altText,anchor,statusCode,status,follow} = data
-
-    //Ibsert into tble=[]
-    Link.create({ 
-        type, 
-        source,
-        destination, 
-        size,
-        altText,
-        anchor, 
-        statusCode,
-        status,
-        follow
-      
-
-    })
-    .then(link => res.redirect('/links'))
-    .catch(err => console.log(err))
- 
-} )
-
+   ls.stdio.concat('data', function(data){
+      console.log('stdout' + data)
+   })
+      ls.stderr.on('data', function(dta){
+         console.log('stdout', + data)
+      })
+   ls.on('exit', function(code){
+      console.log('Child Process exited with code ' + code)
+   })
+   
+})
 //search for links 
 router.get('/search', (req,res) => { 
     let {term} = req.query; 

@@ -10,7 +10,7 @@ const app = express()
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
 //set public 
-app.use(express.static(path.join(__dirname, 'public' )))
+app.use(express.static(path.join(__dirname,"/public/" )))
 
     
 //index route 
@@ -27,7 +27,5 @@ app.get('/', (req,res)  => res.send('INDEX'))
 
 //Link Routes
 app.use('/links', require('./routes/links'))
-
-
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`))
