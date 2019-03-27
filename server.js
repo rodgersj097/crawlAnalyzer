@@ -11,8 +11,6 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
 //set public 
 app.use(express.static(path.join(__dirname,"/public/" )))
-
-    
 //index route 
 app.get('/', (req,res) => res.render('index', {layout: 'landing'}))
 
