@@ -1,23 +1,27 @@
 <!--this is the view for the body--> 
  <section id="gigs" class="container">
     <h1>All Links</h1>
-
     {{#each links }}
     <div class="gig">
+      <form action="/links/check" method="Get">
       <ul>
         <li>{{type}}</li>
         <li><a href="{{source}}" target="_blank">{{source}}</a></li>
         <li><a href="{{destination}}" target="_blank">{{destination}}</a></li>
+        <input type="hidden" name="destination"  value="{{this.destination}}">
         <li>{{size}}</li>
         <li>{{altText}}</li>
         <li>{{anchor}}</li>
         <li>{{statusCode}}</li>
         <li>{{status}}</li>
         <li>{{follow}} </li>
+        <button type="submit" class="btn">Check</button>
       </ul>
-      <button class="btn">Check</button>
+      </form>
+      
     </div>
     {{else}}
         <p>No links availabe</p>
     {{/each}}
   </section>
+<script src="../public/js/main.js" ></script>

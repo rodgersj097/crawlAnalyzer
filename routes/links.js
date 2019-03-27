@@ -24,13 +24,13 @@ router.get('/check', (req,res) => {
    ls.stdio.concat('data', function(data){
       console.log('stdout' + data)
    })
-      ls.stderr.on('data', function(dta){
-         console.log('stdout', + data)
-      })
+   ls.stderr.on('data', function(data){
+      console.log('stdout', + data)
+   })
    ls.on('exit', function(code){
       console.log('Child Process exited with code ' + code)
    })
-   
+   res.redirect('/')
    
 })
 //search for links 
