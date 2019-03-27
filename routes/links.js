@@ -15,13 +15,12 @@ router.get('/', (req,res) =>
     .catch(err => console.log(err))
  )
 
-router.get('/check', (req,res) => {
-   let {destination} = req.query 
+router.get('/check/', (req,res) => {
+   var {destination} = req.query
    var bat = require.resolve('../results/link-crawl.bat')
-   var config = 'C:/Users/rodgersja/Documents/SEO Spider Config.seospiderconfig'
-   var ls = spawn(bat, ['--config', config], ['--crawl', destination] )
-
-   ls.stdio.concat('data', function(data){
+   var ls = spawn(`C:/Program Files (x86)/Screaming Frog SEO Spider/ScreamingFrogSEOSpiderCli.exe --config "C:/Users/rodgersja/Documents/SEO Spider Config.seospiderconfig" --crawl "${destination}" --save-crawl --headless --output-folder "C:/Users/rodgersja/Desktop/CrawlAnalyzer/results/" --export-format "csv" --export-tabs "Internal:All,Response Codes:All" `)
+   
+   ls.stdout.on('data', function(data){
       console.log('stdout' + data)
    })
    ls.stderr.on('data', function(data){
@@ -29,9 +28,9 @@ router.get('/check', (req,res) => {
    })
    ls.on('exit', function(code){
       console.log('Child Process exited with code ' + code)
-   })
-   res.redirect('/')
-   
+   }) 
+  
+   res.redirect('/links')
 })
 //search for links 
 router.get('/search', (req,res) => { 
