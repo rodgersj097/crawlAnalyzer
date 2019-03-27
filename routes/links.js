@@ -15,10 +15,10 @@ router.get('/', (req,res) =>
     .catch(err => console.log(err))
  )
 
-router.post('/links/check', (req,res) => {
+router.get('/check', (req,res) => {
    let {destination} = req.query 
    var bat = require.resolve('../results/link-crawl.bat')
-   var config = 'C:\Users\rodgersja\Documents\SEO Spider Config.seospiderconfig'
+   var config = 'C:/Users/rodgersja/Documents/SEO Spider Config.seospiderconfig'
    var ls = spawn(bat, ['--config', config], ['--crawl', destination] )
 
    ls.stdio.concat('data', function(data){
@@ -30,6 +30,7 @@ router.post('/links/check', (req,res) => {
    ls.on('exit', function(code){
       console.log('Child Process exited with code ' + code)
    })
+   
    
 })
 //search for links 
