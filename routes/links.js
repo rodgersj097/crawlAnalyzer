@@ -17,7 +17,6 @@ router.get('/', (req,res) =>
 
 router.get('/check/', (req,res) => {
    var {destination} = req.query
-   var bat = require.resolve('../results/link-crawl.bat')
    var ls = spawn(`C:/Program Files (x86)/Screaming Frog SEO Spider/ScreamingFrogSEOSpiderCli.exe --config "C:/Users/rodgersja/Documents/SEO Spider Config.seospiderconfig" --crawl "${destination}" --save-crawl --headless --output-folder "C:/Users/rodgersja/Desktop/CrawlAnalyzer/results/" --export-format "csv" --export-tabs "Internal:All,Response Codes:All" `)
    
    ls.stdout.on('data', function(data){
@@ -32,6 +31,7 @@ router.get('/check/', (req,res) => {
   
    res.redirect('/links')
 })
+
 //search for links 
 router.get('/search', (req,res) => { 
     let {term} = req.query; 

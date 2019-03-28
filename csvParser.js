@@ -1,10 +1,12 @@
 const csv = require('csv-parser')
 const fs = require('fs')
 const Link = require('./model/link')
-
+const cron  = require('node-cron')
 var fileNames = ['no_response_inlinks.csv']
 var allFileData = [] 
 
+
+cron.schedule("* * * * 1", function(){
 function doCSVParse(filePath){ 
 var rowData = []
 fs.createReadStream(filePath)
@@ -39,8 +41,7 @@ const data = {
 }
 
 let{type,source,destination,size,altText,anchor,statusCode,status,follow} = data
-
-//Ibsert into tble=[]
+//Insert into tble=[]
 Link.create({ 
     type, 
     source,
@@ -59,7 +60,7 @@ Link.create({
 };
 
 
-
+});
 
 
 
