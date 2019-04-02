@@ -1,25 +1,16 @@
-import { method } from "../../../../AppData/Local/Microsoft/TypeScript/3.3/node_modules/@types/bluebird";
+require("jsdom").env("", function(err, window) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+ 
+    var $ = require("jquery")(window);
+});
 
-const button = document.querySelector('.checkButton');
-
+var ul = document.querySelector('ul')
+const button = ul.querySelector('.checkButton');
 button.addEventListener('click', function(){
-    confirm.log('Check url') 
-    fetch('/clicked', {method: 'POST'})
-        .then(res => {
-            if(res.ok){
-                
-            }
-        })
-
-
-
-
-
-
-
-
-
-
+    Links.checkLinks(ul.querySelector('#destination').value())
 
 
 })
