@@ -1,25 +1,30 @@
-import { method } from "../../../../AppData/Local/Microsoft/TypeScript/3.3/node_modules/@types/bluebird";
+require("jsdom").env("", function(err, window) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+ 
+    var $ = require("jquery")(window);
+});
 
-const button = document.querySelector('.checkButton');
+$(".btn").on('click', function(){
+    console.log("button Clicked ")
+    $.ajax({
+        url:"/check/",
+        type: "POST", 
+        data: {
+            id: $(this.id).val(), 
+            destination: $("dest").val()
+        }, 
+        complete: function(){
+            console.log("process complete")
+        },
+        success: function(data){
+            $(".gig ul").attr("blink_me")
+        }, 
+        error: function(){
+            console.log("error")
+        }
 
-button.addEventListener('click', function(){
-    confirm.log('Check url') 
-    fetch('/clicked', {method: 'POST'})
-        .then(res => {
-            if(res.ok){
-                
-            }
-        })
-
-
-
-
-
-
-
-
-
-
-
-
+})
 })

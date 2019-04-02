@@ -5,6 +5,7 @@ const Link = require('../model/link')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op; 
 const {spawn} = require('child_process')
+var request = require('request')
 //Get link list
 router.get('/', (req,res) =>
  Link.findAll()
@@ -16,19 +17,28 @@ router.get('/', (req,res) =>
  )
 
 router.get('/check/', (req,res) => {
-   var {destination} = req.query
-   var ls = spawn(`C:/Program Files (x86)/Screaming Frog SEO Spider/ScreamingFrogSEOSpiderCli.exe --config "C:/Users/rodgersja/Documents/SEO Spider Config.seospiderconfig" --crawl "${destination}" --save-crawl --headless --output-folder "C:/Users/rodgersja/Desktop/CrawlAnalyzer/results/" --export-format "csv" --export-tabs "Internal:All,Response Codes:All" `)
-   
-   ls.stdout.on('data', function(data){
-      console.log('stdout' + data)
+   var destination = req.body.destination
+   var id = req.body.id
+ request(destination)
+   .on('response', function(response){
+      if(response.statusCode === 200 || response.statusCode === 301){
+         console.log("Link has been fixed")
+         Link.destroy({
+            where: {
+               id: id
+            }
+         })
+      }
+      else{
+         console.log("Link has not been fixed")
+       }  
+      })
+   .on('error', err => {
+      console.log(err)
    })
-   ls.stderr.on('data', function(data){
-      console.log('stdout', + data)
+   .on('finish', function(response){
+      console.log("done")
    })
-   ls.on('exit', function(code){
-      console.log('Child Process exited with code ' + code)
-   }) 
-  
    res.redirect('/links')
 })
 
@@ -75,5 +85,7 @@ router.get('/search', (req,res) => {
 
 
 });
+
+
 
 module.exports = router; 
