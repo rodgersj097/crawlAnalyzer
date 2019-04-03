@@ -6,6 +6,7 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op; 
 const {spawn} = require('child_process')
 var request = require('request')
+const popupS = require('popups')
 //Get link list
 router.get('/', (req,res) =>
  Link.findAll()
@@ -16,13 +17,16 @@ router.get('/', (req,res) =>
     .catch(err => console.log(err))
  )
 
-router.get('/check/', (req,res) => {
-   var destination = req.body.destination
-   var id = req.body.id
+router.get('/check', (req,res) => {
+  let { id, destination} = req.query
+  console.log(destination)
  request(destination)
    .on('response', function(response){
       if(response.statusCode === 200 || response.statusCode === 301){
-         console.log("Link has been fixed")
+         popupS.alert({
+            title: "Success!",
+            content: `${destination} has been fixed! Current status: ${response.statusCode}`
+         })
          Link.destroy({
             where: {
                id: id
@@ -30,7 +34,10 @@ router.get('/check/', (req,res) => {
          })
       }
       else{
-         console.log("Link has not been fixed")
+         popupS.alert({
+            title: "Unsuccseful",
+            content: `Link has not been fixed. Current Status: ${response.statusCode}. Staus Message: ${response.statusMessage}`
+         })
        }  
       })
    .on('error', err => {

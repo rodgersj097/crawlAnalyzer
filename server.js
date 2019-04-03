@@ -5,10 +5,24 @@ const path = require('path')
 const db = require('./config/DBConnect')
 const fs = require('fs')
 const app = express() 
+
 //const csv = require('./csvParser')
 //handlebars
-app.engine('handlebars', exphbs({defaultLayout: 'main'}))
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main',
+    partialsDir: __dirname + '/views/partials/'
+}))
 app.set('view engine', 'handlebars')
+
+var hbs = require("handlebars")
+//this method strips the "" in the destination varible in the ajax request on check function 
+hbs.registerHelper('fix', function(context) {
+    
+    return JSON.stringify(context).replace(/"/g, ' ')
+
+});
+
+
 //set public 
 app.use(express.static(path.join(__dirname,"/public/" )))
 //index route 
