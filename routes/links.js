@@ -7,14 +7,20 @@ const Op = Sequelize.Op;
 const {spawn} = require('child_process')
 var request = require('request')
 //Get link list
-router.get('/', (req,res) =>
+router.get('/', (req,res) =>{
+var totalRows; 
+Link.count()
+   .then(count => totalRows = count)
+      
+   
+
  Link.findAll()
     .then(links => 
         res.render('links', {
-            links
+            links, totalRows
         }) )
     .catch(err => console.log(err))
- )
+      })
 
 router.get('/check', (req,res) => {
   let { id, destination, index} = req.query

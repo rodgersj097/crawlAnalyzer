@@ -22,7 +22,12 @@ hbs.registerHelper('fix', function(context) {
     return JSON.stringify(context).replace(/"/g, ' ')
 
 });
+var indexItems = []
 
+hbs.registerHelper('count', function(index){
+    indexItems.push(index)
+    
+})
 const PORT = process.env.PORT || 8090; 
 server.listen(PORT, console.log(`Server started on port ${PORT}`))
 
@@ -48,7 +53,10 @@ app.use(function(req,res,next){
     next();
 })
 
-
+app.use(function(req,res,next){
+    indexItems = indexItems; 
+    next();
+})
 //Link Routes
 app.use('/links', require('./routes/links'))
 

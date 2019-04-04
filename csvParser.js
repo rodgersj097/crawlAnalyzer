@@ -56,6 +56,12 @@ Link.create({
 .then(console.log('link created'))
 .catch(err => console.log(err))
 
+Link.delete({
+    where : 
+    { 
+        destination: {[Op.like]: '%bbb%'}
+    }
+})
 
 };
 

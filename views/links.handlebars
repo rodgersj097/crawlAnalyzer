@@ -1,14 +1,9 @@
 <!--this is the view for the body--> 
  <section id="gigs" class="container">
      
-    <h1>All Links</h1> <button class="btn-pri right">Check All</button>
-   
-  
-    
+    <h1>All Links</h1> <button class="btn-pri right">Check All</button> <p>Total Links: {{totalRows}}</p>
+
     {{#each links }}
-    <div class="info">
-        {{messages.info}}
-      </div>
     <div class="gig">
       <ul>
         <li>{{type}}</li>
@@ -34,6 +29,13 @@
 
 
 <script type="text/javascript">
+ function success(index){ 
+    $(`input[value=${index}]`).parents('div').addClass('fix')
+  } 
+
+  function failed(index){
+    $(`input[value=${index}]`).parents('div').addClass('broke')
+  }
 
   function check(id, destination, index){
     console.log(index)
@@ -60,17 +62,7 @@
   }
 </script>   
 
-<script>
-  function success(index){ 
-    $(`input[value=${index}]`).parents('div').addClass('fix')
-  } 
-
-  function failed(index){
-    $(`input[value=${index}]`).parents('div').addClass('broke')
-  }
-</script>
-
-
+=
 
 
 <script src="/socket.io/socket.io.js"></script>
