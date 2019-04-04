@@ -1,19 +1,27 @@
 <!--this is the view for the body--> 
  <section id="gigs" class="container">
-    <h1>All Links</h1>
+     
+    <h1>All Links</h1> <button class="btn-pri right">Check All</button>
+   
+  
+    
     {{#each links }}
+    <div class="info">
+        {{messages.info}}
+      </div>
     <div class="gig">
       <ul>
         <li>{{type}}</li>
         <li><a href="{{source}}" target="_blank">{{source}}</a></li>
         <li ><a href="{{destination}}" target="_blank">{{destination}}</a></li>
+        <li><input type="hidden" name="index" value="{{{@index}}}" ></li>
         <li>{{size}}</li>
         <li>{{altText}}</li>
         <li>{{anchor}}</li>
         <li>{{statusCode}}</li>
         <li>{{status}}</li>
         <li>{{follow}} </li>
-        <button type="submit" onclick="check('{{{ this.id}}}', '{{{ fix this.destination}}}')" class="btn checkButton">Check</button>
+        <button type="submit" onclick="check('{{{ this.id}}}', '{{{ fix this.destination}}}', '{{{@index}}}')" class="btn checkButton">Check</button>
       </ul>
       
       
@@ -22,23 +30,27 @@
         <p>No links availabe</p>
     {{/each}}
   </section>
+
+
+
 <script type="text/javascript">
 
-  function check(id, destination){
-    $('.gig ul').addClass("blink_me")
+  function check(id, destination, index){
+    console.log(index)
     $.ajax({
         url:"/links/check/",
         type: "GET", 
         dataType: "json",
         data: {
             "id": id, 
-            "destination": destination
+            "destination": destination, 
+            "index": index
         }, 
         complete: function(){
             console.log("process complete")
         },
         success: function(data){
-            $(".gig ul").attr("blink_me")
+            
         }, 
         error: function(){
             console.log("error")
@@ -47,3 +59,34 @@
     })
   }
 </script>   
+
+<script>
+  function success(index){ 
+    $(`input[value=${index}]`).parents('div').addClass('fix')
+  } 
+
+  function failed(index){
+    $(`input[value=${index}]`).parents('div').addClass('broke')
+  }
+</script>
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8090')
+  
+  socket.on('success', function(data){
+    alertify.alert(data.message)
+
+    success(data.itemIndex)
+  })
+
+  socket.on('error', function(data){
+    alertify.alert(data.message)
+    failed(data.itemIndex)
+  })
+
+</script>
+

@@ -77,6 +77,8 @@ header.inner {
   box-shadow: var(--box-shadow);
 }
 
+
+
 /* Buttons */
 .btn {
   color: #777;
@@ -84,7 +86,6 @@ header.inner {
   border: 1px solid #ccc;
   transition: all 0.7s;
 }
-
 .btn:hover {
   background: var(--primary-color);
   border: 1px solid var(--primary-color);
@@ -100,6 +101,31 @@ header.inner {
   background: var(--primary-hover-color);
   border: 1px solid var(--primary-hover-color);
 }
+
+.btn-pri{
+  background: var(--primary-color);
+  color: #FFFF;
+  padding: 0.6rem; 
+  border: 1px solid #ccc ; 
+  transition: all 0.7s 
+}
+
+.btn-pri:hover {
+  background: #ccc;
+  border: 1px solid var(--primary-color);
+  color: #777;
+}
+
+.btn-pri-reverse {
+  background: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-pri-reverse:hover {
+  background: var(--primary-hover-color);
+  border: 1px solid var(--primary-hover-color);
+}
+
 
 /* Home Search */
 .search-wrap {
@@ -313,3 +339,20 @@ label {
   }
   
 }
+
+.fix{ 
+ background: #4BB543
+}
+
+.broke{ 
+  background: #9c2b2e
+ }
+
+ .right{
+   margin-bottom: 10px;
+   margin-left: 90%
+ }
+
+ h1{
+   display: inline-block;
+ }

@@ -4,13 +4,14 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const db = require('./config/DBConnect')
 const fs = require('fs')
-const app = express() 
-
+const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 //const csv = require('./csvParser')
 //handlebars
 app.engine('handlebars', exphbs({
     defaultLayout: 'main',
-    partialsDir: __dirname + '/views/partials/'
+
 }))
 app.set('view engine', 'handlebars')
 
@@ -21,6 +22,12 @@ hbs.registerHelper('fix', function(context) {
     return JSON.stringify(context).replace(/"/g, ' ')
 
 });
+
+const PORT = process.env.PORT || 8090; 
+server.listen(PORT, console.log(`Server started on port ${PORT}`))
+
+
+
 
 
 //set public 
@@ -33,11 +40,16 @@ db.authenticate()
     .then(() => console.log('Database connected .. '))
     .catch(err => console.log('Error' + err))
 
-const PORT = process.env.PORT || 8090; 
 
 app.get('/', (req,res)  => res.send('INDEX'))
+
+app.use(function(req,res,next){
+    req.io = io ; 
+    next();
+})
+
 
 //Link Routes
 app.use('/links', require('./routes/links'))
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`))
+
