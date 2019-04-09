@@ -1,42 +1,68 @@
 <!--this is the view for the body--> 
  <section id="gigs" class="container">
-     
-    <h1>All Links</h1> <button class="btn-pri right">Check All</button> <p>Total Links: {{totalRows}}</p>
-
+    <h1>All Links</h1> <button class="btn-pri right" onclick="checkAllLinks()">Check All</button> <p>Total Links: {{totalRows}}</p>
     {{#each links }}
-    <div class="gig">
-      <ul>
+    <div class="gig" >
+      <ul class="linkses">
         <li>{{type}}</li>
-        <li><a href="{{source}}" target="_blank">{{source}}</a></li>
-        <li ><a href="{{destination}}" target="_blank">{{destination}}</a></li>
-        <li><input type="hidden" name="index" value="{{{@index}}}" ></li>
+        <li><a rel="noreferrer" href="{{source}}" target="_blank">{{source}}</a></li>
+        <li><a rel="noreferrer" href="{{destination}}" target="_blank">{{destination}}</a></li>
+        <li><input type="hidden" name="id" value="{{{this.id}}}"></li>
+        <li><input type="hidden" name="destination" value="{{{fix this.destination}}}"></li>
+        <li><input type="hidden" name="index" value="{{{@index}}}"></li>
         <li>{{size}}</li>
         <li>{{altText}}</li>
         <li>{{anchor}}</li>
         <li>{{statusCode}}</li>
         <li>{{status}}</li>
         <li>{{follow}} </li>
-        <button type="submit" onclick="check('{{{ this.id}}}', '{{{ fix this.destination}}}', '{{{@index}}}')" class="btn checkButton">Check</button>
-      </ul>
-      
-      
+        <button type="submit" onclick="check('{{{this.id}}}', '{{{fix this.destination}}}', '{{{@index}}}')" class="btn checkButton">Check</button>
+      </ul>  
     </div>
     {{else}}
         <p>No links availabe</p>
     {{/each}}
   </section>
-
-
-
 <script type="text/javascript">
+var rowDetails = [] 
+//this script will pull the values needed to check and update the link and add them to an array for further use
+window.addEventListener('load', (event)=>{
+function getValues(){
+
+var allids = document.querySelectorAll('input[name=id]')
+var allDestinations = document.querySelectorAll('input[name=destination]')
+var allIndex = document.querySelectorAll('input[name=index]')
+
+for(var i=0; i < allids.length; i++){
+  var deets = [] 
+  deets.push(allids[i].value, allDestinations[i].value, allIndex[i].value)
+  rowDetails.push(deets)
+  
+  }
+}
+
+
+getValues()
+})
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function checkAllLinks(){
+   for(var i = 0; i < rowDetails.length; i++){
+    var row = rowDetails[i]
+    check(row[0], row[1], row[2])
+   
+   }
+}
+
+//add animations to rows 
  function success(index){ 
     $(`input[value=${index}]`).parents('div').addClass('fix')
   } 
-
   function failed(index){
     $(`input[value=${index}]`).parents('div').addClass('broke')
   }
-
   function check(id, destination, index){
     console.log(index)
     $.ajax({
@@ -61,10 +87,6 @@
     })
   }
 </script>   
-
-=
-
-
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io.connect('http://localhost:8090')
@@ -75,10 +97,13 @@
     success(data.itemIndex)
   })
 
+  socket.on('success301', function(data){
+    alertify.alert(data.message)
+    sucess(data.itemIndex)
+  })
+
   socket.on('error', function(data){
     alertify.alert(data.message)
     failed(data.itemIndex)
   })
-
 </script>
-

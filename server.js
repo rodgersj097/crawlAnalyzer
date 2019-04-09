@@ -7,7 +7,7 @@ const fs = require('fs')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-//const csv = require('./csvParser')
+const csv = require('./csvParser')
 //handlebars
 app.engine('handlebars', exphbs({
     defaultLayout: 'main',
@@ -22,12 +22,25 @@ hbs.registerHelper('fix', function(context) {
     return JSON.stringify(context).replace(/"/g, ' ')
 
 });
-var indexItems = []
-
-hbs.registerHelper('count', function(index){
-    indexItems.push(index)
+var indexItems = [] 
+var rowDetails = [] 
+var indexIterator =0 
+var destIterator =0 
+var idIterator =0 
+hbs.registerHelper('getIndex', function(index){
     
+    rowDetails.splice(indexIterator, 2, index)
+    indexIterator++; 
 })
+hbs.registerHelper('getDest', function( dest){
+    rowDetails.splice(destIterator, 1, dest)
+    destIterator++
+})
+hbs.registerHelper('getID', function( getID ){
+    rowDetails.splice(idIterator, 0, getID)
+})
+
+
 const PORT = process.env.PORT || 8090; 
 server.listen(PORT, console.log(`Server started on port ${PORT}`))
 

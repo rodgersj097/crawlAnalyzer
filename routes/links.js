@@ -6,13 +6,15 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op; 
 const {spawn} = require('child_process')
 var request = require('request')
+const formidable = require('formidable')
+const fs = require('fs')
+const csvParser = require('../csvParser')
 //Get link list
 router.get('/', (req,res) =>{
 var totalRows; 
 Link.count()
    .then(count => totalRows = count)
       
-   
 
  Link.findAll()
     .then(links => 
@@ -26,7 +28,7 @@ router.get('/check', (req,res) => {
   let { id, destination, index} = req.query
  request(destination)
    .on('response', function(response){
-      if(response.statusCode === 200 || response.statusCode === 301){
+      if(response.statusCode === 200){
         req.io.emit('success', {data : `${destination} hasbeen fixed! Current Status: ${response.statusCode} `, itemIndex: index} )
          Link.destroy({
             where: {
@@ -35,11 +37,21 @@ router.get('/check', (req,res) => {
          })
          res.end()
       }
-      else{
-         req.io.emit('error', {message : `${destination} has not been fixed. `, itemIndex: index}) 
-         console.log("error not fixed")
+      if(response.statusCode === 301){
+         req.io.emit('success301', {message : `${destination} has been redirected! Current status: ${response.statusCode}. `, itemIndex: index}) 
+         console.log("Link fixed")
+         Link.destroy({
+            where: {
+               id: id
+            }
+         })
          res.end()
        }  
+       else{
+         req.io.emit('error', {message : `${destination} has not been fixed. `, itemIndex: index}) 
+         console.log("error not fixed")
+       }
+   
       })
    .on('error', err => {
       console.log(err)
@@ -95,6 +107,40 @@ router.get('/search', (req,res) => {
 
 });
 
+//File Uploader
+router.get('/upload',(req,res)=>{
+   res.render('form')
+})
+
+//take in filr 
+router.post('/fileUpload', (req,res)=>{
+   var form = new formidable.IncomingForm().parse(req)
+      .on('fileBegin', (name, file)=>{
+         file.path =  'C:/Users/rodgersja/Desktop/crawlAnalyzer/results/' + file.name 
+         fileName =  'C:/Users/rodgersja/Desktop/crawlAnalyzer/results/' + file.name 
+      })
+
+      .on('field', (name, field) => {
+         console.log('Field', name, field)
+      })
+      .on('error', (err)=>{
+         console.log(err); 
+         req.io.emit('fileUploadError', {
+            data: `File upload error`
+         })
+      })
+      .on('end', (name, file) => { 
+         req.io.emit('fileuploaded', {
+            data: `${file} has been uploaded`
+         })
+         
+
+         res.setTimeout(2000, ()=>{
+         res.redirect('/links')
+      })
+      })
+})
+ 
 
 
 module.exports = router; 

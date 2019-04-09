@@ -3,10 +3,12 @@ const fs = require('fs')
 const Link = require('./model/link')
 const cron  = require('node-cron')
 var fileNames = ['no_response_inlinks.csv']
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 var allFileData = [] 
 
 
-cron.schedule("* * * * 1", function(){
+//Parse CSV and then create each row
 function doCSVParse(filePath){ 
 var rowData = []
 fs.createReadStream(filePath)
@@ -23,10 +25,6 @@ fs.createReadStream(filePath)
     });
 } 
 
-fileNames.forEach(element => {
-   doCSVParse(element) 
-});
-
 function CreateLink(row){
 const data = { 
     type: row[Object.keys(row)[0]],
@@ -42,7 +40,8 @@ const data = {
 
 let{type,source,destination,size,altText,anchor,statusCode,status,follow} = data
 //Insert into tble=[]
-Link.create({ 
+Link.findOrCreate({ 
+    where: {
     type, 
     source,
     destination, 
@@ -52,11 +51,12 @@ Link.create({
     statusCode,
     status,
     follow
+    } 
 })
 .then(console.log('link created'))
 .catch(err => console.log(err))
 
-Link.delete({
+Link.destroy({
     where : 
     { 
         destination: {[Op.like]: '%bbb%'}
@@ -65,6 +65,11 @@ Link.delete({
 
 };
 
+//start csv Parse 
+cron.schedule("* * * * 1", function(){
+fileNames.forEach(element => {
+    doCSVParse(element) 
+ });
 
 });
 

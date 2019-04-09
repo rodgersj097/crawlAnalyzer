@@ -1,0 +1,21 @@
+<section class="container">
+    <form action="fileupload" method="POST" enctype="multipart/form-data"> 
+        <input class type="file" name="fileUpload" >
+        <input type="submit" >
+
+        
+    </form>
+
+</section>
+
+<script>
+    var socket = io.connect('http://localhost:8090')
+
+    socket.on('fileUploadedError', (data)=>{
+        alertify.success(data)
+    })
+
+     socket.on('fileuploaded', (data)=>{
+        alertify.success(data)
+    })
+</script>

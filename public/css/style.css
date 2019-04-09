@@ -129,7 +129,7 @@ header.inner {
 
 /* Home Search */
 .search-wrap {
-  background: url('../img/showcase.jpg') no-repeat center center fixed  ;
+  background: url('../img/adorable-affection-boy-1739842 .jpg') no-repeat center center fixed  ;
   height: 100vh;
   width: 100%;
   padding: 1.3rem 3rem;
@@ -172,6 +172,7 @@ header.inner {
 }
 
 /* Everything in the search form */
+
 .search-form > * {
   border: 0;
   padding: 0 0 0 10px;
@@ -184,6 +185,42 @@ header.inner {
 
 input[type='search'] {
   flex-basis: 600px;
+}
+
+/*Inline Searchform */
+.inline-search-form{
+  background: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  color: #fff;
+
+  cursor: pointer;
+  transition: all 0.8s;
+}
+
+.inline-search-form input[type='submit']:hover {
+  background: var(--primary-hover-color);
+  border: 1px solid var(--primary-hover-color);
+}
+
+.inline-search-form {
+  display: flex;
+  width: 250px;
+  box-shadow: var(--box-shadow);
+}
+
+.inline-search-form i {
+  color: #333;
+}
+
+/* Everything in the search form */
+.inline-search-form > * {
+  border: 0;
+  padding: 0 0 0 10px;
+  background: #fff;
+  line-height: 50px;
+  font-size: 1rem;
+  border-radius: 0;
+  outline: 0;
 }
 
 /* Gigs */
