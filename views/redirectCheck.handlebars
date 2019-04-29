@@ -1,0 +1,59 @@
+<section  id="gigs" class="container">
+    <h1>Check Redirection Chain</h1>
+    <div class="input-group">
+        <label for="redirectUrl">Enter URL that you want to inspect</label>
+        <input type="text" name="redirectUrl" id="redirectUrl" class="input-box" placeholder="eg. www.worldvision.ca/our-work/community-based">
+    </div>
+    <input type="submit" id="redirectFormSubmit" value="Search keyword" class="btn">
+   {{#each redirectCount }}
+    <div class="redir">
+        <ul>
+            <li>{{statusCode}}</li>
+            <li>{{redirectUrl}}</li>
+        </ul>
+    {{else}}
+        <p>Please enter a Url to check</p>
+    {{/each}} 
+    </div>
+</section>
+<script type="text/javascript">
+    document.querySelector("#redirectFormSubmit").onkeydown = function(e){ 
+        if(e.keyCode == 13){ 
+            document.querySelector(".btn").addEventListener('click', function(){
+            redirectCheck(document.querySelector("#redirectUrl").value)
+            console.log(document.querySelector("#redirectUrl").value)
+            })
+        }
+    }
+
+
+
+   document.querySelector(".btn").addEventListener('click', function(){
+        redirectCheck(document.querySelector("#redirectUrl").value)
+        console.log(document.querySelector("#redirectUrl").value)
+    })
+
+
+    function redirectCheck(url){
+        $.ajax({
+        async: true,
+        url:"/redirectCheck/check",
+        type: "GET",
+        dataType: "json",
+        data: {
+            "url": url
+        }, 
+        complete: function(){
+            console.log("process complete")
+        },
+        success: function(data){
+            console.log("Success")
+        }, 
+        error: function(){
+            console.log("error")
+        }
+        })
+    }
+</script>
+
+

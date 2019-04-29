@@ -8,13 +8,13 @@ const {spawn} = require('child_process')
 var request = require('request')
 const formidable = require('formidable')
 const fs = require('fs')
-const csvParser = require('../csvParser')
+
+//const csvParser = require('../csvParser')
 //Get link list
 router.get('/', (req,res) =>{
 var totalRows; 
 Link.count()
    .then(count => totalRows = count)
-      
 
  Link.findAll()
     .then(links => 
@@ -23,11 +23,63 @@ Link.count()
         }) )
     .catch(err => console.log(err))
       })
-
+//This method checks that status code of links sent in by an ajax request
 router.get('/check', (req,res) => {
+   //u se deconstrction to get the variables fromn the query 
   let { id, destination, index} = req.query
- request(destination)
+//request the destination link f
+ request(destination, {followAllRedirects: true, method: 'HEAD', headers: {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.46 Safari/537.36"}})
    .on('response', function(response){
+      //if the link is redirected we grab the redirected link on it and then perform the tests on it 
+      if(response.request.uri.href != undefined ){ 
+         console.log(response.request.uri.href)
+         newDest = response.request.uri.href
+         console.log(newDest)
+         request(newDest)
+            .on('response', function(responseRedirect){
+               if(responseRedirect.statusCode === 403){
+                  req.io.emit('success', {message : `${destination} has been Redirected! `, itemIndex: index} )
+                   Link.destroy({
+                      where: {
+                         id: id
+                      }
+                   })
+                   res.end()
+                }
+              else if(responseRedirect.statusCode === 200){
+                  req.io.emit('success', {message : `${destination} has been fixed! Current Status: ${responseRedirect.statusCode} `, itemIndex: index} )
+                   Link.destroy({
+                      where: {
+                         id: id
+                      }
+                   })
+                   res.end()
+                }
+              else  if(responseRedirect.statusCode === 301){
+                   req.io.emit('success301', {message : `${destination} has been redirected! Current status: ${responseRedirect.statusCode}. `, itemIndex: index}) 
+                   console.log("Link fixed")
+                   Link.destroy({
+                      where: {
+                         id: id
+                      }
+                   })
+                   res.end()
+                 }  
+                 else{
+                   req.io.emit('error', {message : `${destination} has not been fixed. current status Code: ${responseRedirect.statusCode} `, itemIndex: index}) 
+                   console.log(`${responseRedirect.url} has not been fixed. Current status Code is ${responseRedirect.statusCode}`)
+                   res.end();
+                 }
+            })
+            .on('error', err => {
+               console.log(err)
+               res.end()
+            })
+            .on('finish', function(response){
+               console.log("done")
+            })
+      }
+//This is if the link is not redirected 
       if(response.statusCode === 200){
         req.io.emit('success', {data : `${destination} hasbeen fixed! Current Status: ${response.statusCode} `, itemIndex: index} )
          Link.destroy({
@@ -37,7 +89,7 @@ router.get('/check', (req,res) => {
          })
          res.end()
       }
-      if(response.statusCode === 301){
+    else  if(response.statusCode === 301){
          req.io.emit('success301', {message : `${destination} has been redirected! Current status: ${response.statusCode}. `, itemIndex: index}) 
          console.log("Link fixed")
          Link.destroy({
@@ -50,6 +102,7 @@ router.get('/check', (req,res) => {
        else{
          req.io.emit('error', {message : `${destination} has not been fixed. `, itemIndex: index}) 
          console.log("error not fixed")
+         res.end();
        }
    
       })
@@ -59,8 +112,7 @@ router.get('/check', (req,res) => {
    })
    .on('finish', function(response){
       console.log("done")
-   })
-   
+   }) 
 })
 
 //search for links 
@@ -106,12 +158,10 @@ router.get('/search', (req,res) => {
 
 
 });
-
 //File Uploader
 router.get('/upload',(req,res)=>{
    res.render('form')
 })
-
 //take in filr 
 router.post('/fileUpload', (req,res)=>{
    var form = new formidable.IncomingForm().parse(req)
@@ -140,7 +190,9 @@ router.post('/fileUpload', (req,res)=>{
       })
       })
 })
- 
+
+
+
 
 
 module.exports = router; 

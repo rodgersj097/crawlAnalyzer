@@ -23,27 +23,25 @@
         <p>No links availabe</p>
     {{/each}}
   </section>
-<script type="text/javascript">
+<!--javascript--> 
+<script>
 var rowDetails = [] 
-//this script will pull the values needed to check and update the link and add them to an array for further use
+//this method will pull the values needed to check and update the link and add them to an array for further use
+
 window.addEventListener('load', (event)=>{
 function getValues(){
-
 var allids = document.querySelectorAll('input[name=id]')
 var allDestinations = document.querySelectorAll('input[name=destination]')
 var allIndex = document.querySelectorAll('input[name=index]')
-
 for(var i=0; i < allids.length; i++){
   var deets = [] 
   deets.push(allids[i].value, allDestinations[i].value, allIndex[i].value)
   rowDetails.push(deets)
-  
   }
 }
-
-
 getValues()
 })
+//sets await sleep for async functions 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -52,10 +50,9 @@ async function checkAllLinks(){
    for(var i = 0; i < rowDetails.length; i++){
     var row = rowDetails[i]
     check(row[0], row[1], row[2])
-   
+    sleep(1500)
    }
 }
-
 //add animations to rows 
  function success(index){ 
     $(`input[value=${index}]`).parents('div').addClass('fix')
@@ -66,6 +63,7 @@ async function checkAllLinks(){
   function check(id, destination, index){
     console.log(index)
     $.ajax({
+      async: true, 
         url:"/links/check/",
         type: "GET", 
         dataType: "json",
@@ -78,12 +76,10 @@ async function checkAllLinks(){
             console.log("process complete")
         },
         success: function(data){
-            
         }, 
         error: function(){
             console.log("error")
         }
-
     })
   }
 </script>   
@@ -93,7 +89,6 @@ async function checkAllLinks(){
   
   socket.on('success', function(data){
     alertify.alert(data.message)
-
     success(data.itemIndex)
   })
 
@@ -105,5 +100,7 @@ async function checkAllLinks(){
   socket.on('error', function(data){
     alertify.alert(data.message)
     failed(data.itemIndex)
+    console.log(`done ${data.itemIndex}`)
   })
+
 </script>

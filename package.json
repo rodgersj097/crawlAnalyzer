@@ -26,13 +26,14 @@
     "bookshelf": "^0.14.2",
     "boostrap": "^2.0.0",
     "browserify": "^16.2.3",
+    "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "cron-jobs": "^1.0.3",
     "csv": "^5.1.1",
     "csv-parser": "^2.2.0",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "jsdom": "^14.0.0",
     "knex": "^0.16.3",
     "mysql": "^2.16.0",
@@ -40,10 +41,11 @@
     "node-cron": "^2.0.3",
     "nodemon": "^1.18.10",
     "request": "^2.88.0",
-    "sequelize": "^5.2.8",
+    "sequelize": "^5.7.6",
     "simple-popup-modal": "^1.1.2",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
+    "spin.js": "^4.0.0",
     "uniq": "^1.0.1"
   }
 }

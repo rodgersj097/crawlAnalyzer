@@ -56,25 +56,14 @@ Link.findOrCreate({
 .then(console.log('link created'))
 .catch(err => console.log(err))
 
-Link.destroy({
-    where : 
-    { 
-        destination: {[Op.like]: '%bbb%'}
-    }
-})
-
 };
 
 //start csv Parse 
+
 cron.schedule("* * * * 1", function(){
 fileNames.forEach(element => {
     doCSVParse(element) 
  });
-
-});
-
-
-
-
+})
 
 
